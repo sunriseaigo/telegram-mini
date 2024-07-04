@@ -5,6 +5,7 @@ import { Montserrat } from "next/font/google";
 
 import Menu from "@/components/Menu";
 import { useState } from "react";
+import { TonConnectButton } from "@tonconnect/ui-react";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "600", "700"] });
 
@@ -21,9 +22,10 @@ export default function Connected() {
           </div>
         </div>
         <div>
-          <button className="w-[150px] py-4 text-center bg-[#111111] font-semibold text-[13px]/[15px] text-white rounded-[14px]">
+          <TonConnectButton className='ton-connect-page__button' />
+          {/* <button className="w-[150px] py-4 text-center bg-[#111111] font-semibold text-[13px]/[15px] text-white rounded-[14px]">
             Connected
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="assets-wrapper bg-white rounded-[14px] py-[22px] px-[30px] mt-4">
