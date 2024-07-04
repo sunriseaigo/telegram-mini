@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Menu from "@/components/Menu";
 import { useState, useEffect } from "react";
 import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
+import { useInitData } from "@tma.js/sdk-react";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -16,6 +17,8 @@ const montserrat = Montserrat({
 export default function Connected() {
   const router = useRouter();
   const wallet = useTonWallet();
+  const initData = useInitData();
+
   const [assets, setAssets] = useState(null);
 
   useEffect(() => {
@@ -39,9 +42,7 @@ export default function Connected() {
             <h2 className=" font-semibold text-[15px]/[14.58px] text-donate-text-dark m-0">
               Welcome
             </h2>
-            <p className="font-normal text-xs/[15px] text-donate-text-dark">
-              @Xcaesar
-            </p>
+            <p className="font-normal text-xs/[15px] text-donate-text-dark">{`@${initData?.user?.username}`}</p>
           </div>
         </div>
         <div>
