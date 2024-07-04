@@ -69,7 +69,9 @@ function RootInner({ children }: PropsWithChildren) {
   }, [debug]);
 
   return (
-    <TonConnectUIProvider manifestUrl={manifestUrl}>
+    <TonConnectUIProvider manifestUrl={manifestUrl} actionsConfiguration={{
+      twaReturnUrl: 'https://t.me/Toncinoratorbot'
+  }}>
       <SDKProvider acceptCustomStyles debug={debug}>
         <App>
           {children}
