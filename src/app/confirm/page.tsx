@@ -24,8 +24,9 @@ const Confirm = () => {
   }, []);
 
   const handleBurn = async () => {
+    const validUntilTimestamp = Math.floor(Date.now() / 1000) + 300;
     const transaction = {
-      validUntil: 1000,
+      validUntil: validUntilTimestamp,
       messages: [
         {
           address: "UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ", // destination address
