@@ -22,7 +22,6 @@ const Confirm = () => {
     };
     fetch();
   }, []);
-
   const handleBurn = async () => {
     const validUntilTimestamp = Math.floor(Date.now() / 1000) + 300;
     const transaction = {
@@ -30,7 +29,7 @@ const Confirm = () => {
       messages: [
         {
           address: "UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ", // destination address
-          amount: "10000000", // Toncoin in nanotons
+          amount: `${Number(amount) * 10e8}`, // Toncoin in nanotons
         },
       ],
     };
