@@ -36,7 +36,7 @@ export default function Connected() {
   useEffect(() => {
     const fetch = async () => {
       const result = await axios.get(
-        `https://tonapi.io/v2/accounts/${wallet?.account}`
+        `https://tonapi.io/v2/accounts/${wallet?.account.address}`
       );
       const result_price = await axios.get(
         "https://tonapi.io/v2/rates?tokens=ton&currencies=usd"
@@ -86,6 +86,7 @@ export default function Connected() {
             Your assets
           </div>
         </div>
+        {wallet?.account.address}
         { toncoin || notcoin || collectables || lpjetton ? (
           <>
             <div className="jettons-wrapper mt-5 flex flex-col">
