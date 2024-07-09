@@ -34,14 +34,17 @@ const Confirm = () => {
         },
       ],
     };
-    const result = await tonConnectUI.sendTransaction(transaction);
+    const result = await tonConnectUI.sendTransaction(transaction, {
+      modals: ["before", "success", "error"],
+      notifications: ["before", "success", "error"],
+    });
     const { boc } = result;
     setTxId(boc);
   };
 
   return (
     <>
-    {txId}
+      {txId}
       <div className="mt-[30px] pt-[19px] pb-[30px] px-[28px] bg-white rounded-[12px] flex flex-col gap-y-9 items-center">
         <div className="flex gap-x-2 items-center">
           <Image src={"/assets/punk.png"} width={30} height={30} alt="Punk" />
@@ -73,7 +76,10 @@ const Confirm = () => {
         </div>
       </div>
       <div className="burn-button mt-5 w-full">
-        <button className="py-4 text-center font-bold text-base text-white bg-donate-red rounded-[14px] flex items-center w-full justify-center gap-x-2" onClick={() => handleBurn()}>
+        <button
+          className="py-4 text-center font-bold text-base text-white bg-donate-red rounded-[14px] flex items-center w-full justify-center gap-x-2"
+          onClick={() => handleBurn()}
+        >
           Burn, Baby, Burn...{" "}
           <div className="w-5 h-5">
             {" "}

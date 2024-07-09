@@ -87,7 +87,6 @@ export default function Connected() {
             Your assets
           </div>
         </div>
-        {wallet?.account.address}
         { toncoin || notcoin || collectables || lpjetton ? (
           <>
             <div className="jettons-wrapper mt-5 flex flex-col">
