@@ -5,7 +5,7 @@ import { Montserrat } from "next/font/google";
 import { useRouter } from "next/navigation";
 
 import Menu from "@/components/Menu";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
 import { useInitData } from "@tma.js/sdk-react";
 import axios from "axios";
@@ -37,6 +37,7 @@ export default function Connected() {
     const fetch = async () => {
       const result = await axios.get(
         `https://tonapi.io/v2/accounts/${wallet?.account.address}`
+        // `https://tonapi.io/v2/accounts/UQC7khNt0mCFPilWZxIp6Ao8oyxVYYzlWshqptq79vN4Bxt4`
       );
       const result_price = await axios.get(
         "https://tonapi.io/v2/rates?tokens=ton&currencies=usd"
@@ -98,7 +99,7 @@ export default function Connected() {
               </div>
               <div className="jetton-items mt-[15px] flex flex-col gap-y-2">
                 {toncoin && (
-                  <div className="ton-item bg-donate-card-bg w-full rounded-[44px] ps-5 pe-3 py-4 flex justify-between cursor-pointer">
+                  <div className="ton-item bg-donate-card-bg w-full rounded-[44px] ps-5 pe-3 py-4 flex justify-between cursor-pointer" onClick={() => router.push('confirm')}>
                     <>
                       <div className="flex gap-x-2 items-center">
                         <Image
