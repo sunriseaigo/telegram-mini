@@ -6,7 +6,7 @@ import Storage from "./icons/Storage";
 
 const Menu = () => {
   return (
-    <div className=" rounded-t-[35px] bg-white w-100 pt-[22px] pb-[43px] px-[40px] flex justify-between items-center shadow-md">
+    <div className=" rounded-t-[35px] bg-white w-100 pt-[22px] pb-[43px] px-[40px] flex justify-between items-center shadow-lg">
       <div className="flex flex-col items-center gap-y-2">
         <Burn />
         <p className=" font-normal text-[15px]/[22px] text-donate-menu-active">Burn</p>

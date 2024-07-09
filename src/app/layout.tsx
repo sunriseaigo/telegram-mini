@@ -17,8 +17,8 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body>
-        <div className="min-h-auto w-full bg-donate-bg pt-[55px] relative overflow-x-hidden">
-          <div className="w-full px-[19px] h-[calc(100vh+150px)]">
+        <div className="h-screen w-full bg-donate-bg pt-[15px] relative overflow-x-hidden">
+          <div className="w-full px-[19px]">
             <Root>{children}</Root>
           </div>
         </div>

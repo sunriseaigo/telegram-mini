@@ -5,9 +5,10 @@ import { Montserrat } from "next/font/google";
 import { useRouter } from "next/navigation";
 
 import Menu from "@/components/Menu";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
 import { useInitData } from "@tma.js/sdk-react";
+import axios from "axios";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -19,13 +20,32 @@ export default function Connected() {
   const wallet = useTonWallet();
   const initData = useInitData();
 
-  const [assets, setAssets] = useState(null);
+  const [toncoin, setToncoin] = useState(0);
+  const [tprice, setTprice] = useState(0)
+
+  const [notcoin, setNotcoin] = useState(0);
+  const [collectables, setCollectables] = useState(null);
+  const [lpjetton, setLpjetton] = useState(null);
 
   useEffect(() => {
     if (!wallet) {
       router.push("/");
     }
   }, [wallet]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const result = await axios.get(
+        `https://tonapi.io/v2/accounts/${wallet?.account}`
+      );
+      const result_price = await axios.get(
+        "https://tonapi.io/v2/rates?tokens=ton&currencies=usd"
+      );
+      setTprice(Number(result_price.data.rates.TON.prices.USD));
+      setToncoin(Number(result.data.balance) / 10e8);
+    };
+    fetch();
+  }, []);
 
   return (
     <>
@@ -66,7 +86,7 @@ export default function Connected() {
             Your assets
           </div>
         </div>
-        {assets ? (
+        { toncoin || notcoin || collectables || lpjetton ? (
           <>
             <div className="jettons-wrapper mt-5 flex flex-col">
               <div
@@ -76,116 +96,152 @@ export default function Connected() {
                 Jettons:
               </div>
               <div className="jetton-items mt-[15px] flex flex-col gap-y-2">
-                <div className="ton-item bg-donate-card-bg w-full rounded-[44px] ps-5 pe-3 py-4 flex justify-between">
-                  <div className="flex gap-x-2 items-center">
-                    <Image
-                      src={"/assets/ton.svg"}
-                      alt="ton"
-                      width={29}
-                      height={29}
-                    />
-                    <div className="flex flex-col gap-y-[3px]">
-                      <div
-                        className={`${montserrat.className} font-semibold text-donate-menu-active text-[11px]/[13px]`}
-                      >
-                        Ton
+                {toncoin && (
+                  <div className="ton-item bg-donate-card-bg w-full rounded-[44px] ps-5 pe-3 py-4 flex justify-between cursor-pointer">
+                    <>
+                      <div className="flex gap-x-2 items-center">
+                        <Image
+                          src={"/assets/ton.svg"}
+                          alt="ton"
+                          width={29}
+                          height={29}
+                        />
+                        <div className="flex flex-col gap-y-[3px]">
+                          <div
+                            className={`${montserrat.className} font-semibold text-donate-menu-active text-[11px]/[13px]`}
+                          >
+                            Ton
+                          </div>
+                          <div
+                            className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[11px]/[13px]`}
+                          >
+                            Jetton
+                          </div>
+                        </div>
                       </div>
-                      <div
-                        className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[11px]/[13px]`}
-                      >
-                        Jetton
+                      <div className="flex gap-x-2 items-center">
+                        <div className="flex flex-col gap-y-[3px] items-end">
+                          <div
+                            className={`${montserrat.className} font-semibold text-donate-menu-active text-[11px]/[13px]`}
+                          >
+                            {toncoin}
+                          </div>
+                          <div
+                            className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[11px]/[13px]`}
+                          >
+                            {(tprice * toncoin).toFixed(2)}$
+                          </div>
+                        </div>
+                        <Image
+                          src={"/assets/arrowleft.svg"}
+                          alt="left"
+                          width={21.5}
+                          height={21.5}
+                        />
+                      </div>
+                    </>
+                  </div>
+                )}
+                {notcoin && (
+                  <>
+                    <div className="ton-item bg-donate-card-bg w-full rounded-[44px] ps-5 pe-3 py-4 flex justify-between">
+                      <div className="flex gap-x-2 items-center">
+                        <Image
+                          src={"/assets/not.svg"}
+                          alt="ton"
+                          width={29}
+                          height={29}
+                        />
+                        <div className="flex flex-col gap-y-[3px]">
+                          <div
+                            className={`${montserrat.className} font-semibold text-donate-menu-active text-[11px]/[13px]`}
+                          >
+                            Not
+                          </div>
+                          <div
+                            className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[11px]/[13px]`}
+                          >
+                            Jetton
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-x-2 items-center">
+                        <div className="flex flex-col gap-y-[3px] items-end">
+                          <div
+                            className={`${montserrat.className} font-semibold text-donate-menu-active text-[11px]/[13px]`}
+                          >
+                            11200
+                          </div>
+                          <div
+                            className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[11px]/[13px]`}
+                          >
+                            383$
+                          </div>
+                        </div>
+                        <Image
+                          src={"/assets/arrowleft.svg"}
+                          alt="left"
+                          width={21.5}
+                          height={21.5}
+                        />
                       </div>
                     </div>
-                  </div>
-                  <div className="flex gap-x-2 items-center">
-                    <div className="flex flex-col gap-y-[3px] items-end">
-                      <div
-                        className={`${montserrat.className} font-semibold text-donate-menu-active text-[11px]/[13px]`}
-                      >
-                        25
-                      </div>
-                      <div
-                        className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[11px]/[13px]`}
-                      >
-                        323$
-                      </div>
-                    </div>
-                    <Image
-                      src={"/assets/arrowleft.svg"}
-                      alt="left"
-                      width={21.5}
-                      height={21.5}
-                    />
-                  </div>
-                </div>
-                <div className="ton-item bg-donate-card-bg w-full rounded-[44px] ps-5 pe-3 py-4 flex justify-between">
-                  <div className="flex gap-x-2 items-center">
-                    <Image
-                      src={"/assets/not.svg"}
-                      alt="ton"
-                      width={29}
-                      height={29}
-                    />
-                    <div className="flex flex-col gap-y-[3px]">
-                      <div
-                        className={`${montserrat.className} font-semibold text-donate-menu-active text-[11px]/[13px]`}
-                      >
-                        Not
-                      </div>
-                      <div
-                        className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[11px]/[13px]`}
-                      >
-                        Jetton
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-x-2 items-center">
-                    <div className="flex flex-col gap-y-[3px] items-end">
-                      <div
-                        className={`${montserrat.className} font-semibold text-donate-menu-active text-[11px]/[13px]`}
-                      >
-                        11200
-                      </div>
-                      <div
-                        className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[11px]/[13px]`}
-                      >
-                        383$
-                      </div>
-                    </div>
-                    <Image
-                      src={"/assets/arrowleft.svg"}
-                      alt="left"
-                      width={21.5}
-                      height={21.5}
-                    />
-                  </div>
-                </div>
+                  </>
+                )}
               </div>
             </div>
-            <div className="collectables mt-[13px]">
-              <div
-                className={`title-wrapper ${montserrat.className} text-donate-menu-active font-bold text-[15px]/[15px]`}
-              >
-                {" "}
-                Collectables:
-              </div>
-              <div className="collectable-content flex justify-between mt-4 gap-x-2">
-                <div className="collect-item flex flex-col pb-2 rounded-[19.6px] gap-y-2 items-center bg-donate-card-bg">
-                  <div className="w-[140px] h-[140px] flex flex-col justify-center items-center bg-radial">
-                    <div className="bg-white py-2 px-3 flex gap-x-1 rounded-lg items-center">
-                      <div className="font-semibold text-sm text-donate-text-dark">
-                        10,000
+            {collectables && (
+              <div className="collectables mt-[13px]">
+                <div
+                  className={`title-wrapper ${montserrat.className} text-donate-menu-active font-bold text-[15px]/[15px]`}
+                >
+                  {" "}
+                  Collectables:
+                </div>
+                <div className="collectable-content flex justify-between mt-4 gap-x-2">
+                  <div className="collect-item flex flex-col pb-2 rounded-[19.6px] gap-y-2 items-center bg-donate-card-bg">
+                    <div className="w-[140px] h-[140px] flex flex-col justify-center items-center bg-radial">
+                      <div className="bg-white py-2 px-3 flex gap-x-1 rounded-lg items-center">
+                        <div className="font-semibold text-sm text-donate-text-dark">
+                          10,000
+                        </div>
+                        <Image
+                          src={"/assets/ton.jpg"}
+                          width={12}
+                          height={12}
+                          alt="collect"
+                          className="-mt-1"
+                        />
                       </div>
-                      <Image
-                        src={"/assets/ton.jpg"}
-                        width={12}
-                        height={12}
-                        alt="collect"
-                        className="-mt-1"
-                      />
+                    </div>
+                    <div>
+                      <div
+                        className={`${montserrat.className} font-semibold text-donate-menu-active text-[9px]/[8px]`}
+                      >
+                        10,000 NOT VOUCHER
+                      </div>
+                      <div
+                        className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[9px]/[8px] text-center mt-[4px]`}
+                      >
+                        NFT
+                      </div>
                     </div>
                   </div>
-                  <div>
+                  <div className="collect-item flex flex-col pb-2 rounded-[19.6px] gap-y-2 items-center bg-donate-card-bg">
+                    <div className="w-[140px] h-[140px] flex flex-col justify-center items-center bg-radial">
+                      <div className="bg-white py-2 px-3 flex gap-x-1 rounded-lg items-center">
+                        <div className="font-semibold text-sm text-donate-text-dark">
+                          10,000
+                        </div>
+                        <Image
+                          src={"/assets/ton.jpg"}
+                          width={12}
+                          height={12}
+                          alt="collect"
+                          className="-mt-1"
+                        />
+                      </div>
+                    </div>
                     <div
                       className={`${montserrat.className} font-semibold text-donate-menu-active text-[9px]/[8px]`}
                     >
@@ -198,35 +254,9 @@ export default function Connected() {
                     </div>
                   </div>
                 </div>
-                <div className="collect-item flex flex-col pb-2 rounded-[19.6px] gap-y-2 items-center bg-donate-card-bg">
-                  <div className="w-[140px] h-[140px] flex flex-col justify-center items-center bg-radial">
-                    <div className="bg-white py-2 px-3 flex gap-x-1 rounded-lg items-center">
-                      <div className="font-semibold text-sm text-donate-text-dark">
-                        10,000
-                      </div>
-                      <Image
-                        src={"/assets/ton.jpg"}
-                        width={12}
-                        height={12}
-                        alt="collect"
-                        className="-mt-1"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className={`${montserrat.className} font-semibold text-donate-menu-active text-[9px]/[8px]`}
-                  >
-                    10,000 NOT VOUCHER
-                  </div>
-                  <div
-                    className={`${montserrat.className} font-normal text-donate-menu-active/40 text-[9px]/[8px] text-center mt-[4px]`}
-                  >
-                    NFT
-                  </div>
-                </div>
               </div>
-            </div>
-            <div className="lp-jettons mt-[15px]">
+            )}
+            {lpjetton && <div className="lp-jettons mt-[15px]">
               <div
                 className={`title-wrapper ${montserrat.className} text-donate-menu-active font-bold text-[15px]/[15px]`}
               >
@@ -275,7 +305,7 @@ export default function Connected() {
                   />
                 </div>
               </div>
-            </div>
+            </div>}
           </>
         ) : (
           <div className=" h-[calc(100vh-170px)] w-full flex flex-col justify-center items-center text-center bg-white px-[50px] font-bold text-[19px]/[23px] text-donate-text-gray">

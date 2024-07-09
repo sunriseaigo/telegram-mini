@@ -6,14 +6,32 @@ import { Montserrat } from "next/font/google";
 import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
 
 import Menu from "@/components/Menu";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useInitData } from "@tma.js/sdk-react";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
 export default function Home() {
+  const [assets, setAssets] = useState([]);
+
   const router = useRouter();
   const wallet = useTonWallet();
   const initData = useInitData();
+
+  useEffect(() => {
+    const fetchAssets = async () => {
+        if (wallet) {
+            const walletAddress = wallet;
+
+            // Use TON API or your backend to fetch asset balances.
+            // Here's an example API call to retrieve asset info (you may need a real provider endpoint):
+            const response = await fetch(`https://tonapi.io/v1/assets?address=${walletAddress}`);
+            const data = await response.json();
+            setAssets(data);
+        }
+    };
+
+    fetchAssets();
+}, [wallet])
 
   useEffect(() => {
     if (wallet) {
