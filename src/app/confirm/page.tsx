@@ -72,7 +72,7 @@ const Confirm = () => {
         </div>
       </div>
       <div className="burn-button mt-5 w-full">
-        <button className="py-4 text-center font-bold text-base text-white bg-donate-red rounded-[14px] flex items-center w-full justify-center gap-x-2">
+        <button className="py-4 text-center font-bold text-base text-white bg-donate-red rounded-[14px] flex items-center w-full justify-center gap-x-2" onClick={() => handleBurn()}>
           Burn, Baby, Burn...{" "}
           <div className="w-5 h-5">
             {" "}
